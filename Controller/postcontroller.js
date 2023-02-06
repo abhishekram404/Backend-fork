@@ -1,18 +1,12 @@
-const data = [
+const post = [
   {
     id: 1,
     name: "Ayush",
-  },
-  {
-    id: 2,
-    name: "Ayush",
-  },
-  {
-    id: 3,
-    name: "Ayush",
+    description:
+      " I  am the person who love to cooking and doing all the things that are in the field of what important",
   },
 ];
 
-module.exports.getData = (req, res) => {
-  return res.status(200).json(data);
+module.exports.getAllPost = (req, res) => {
+  return res.status(200).json(post);
 };

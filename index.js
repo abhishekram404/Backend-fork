@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 const postRoute = require("./Routes/postRoutes");
+const userRoutes = require("./Routes/userRoutes");
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
@@ -18,3 +19,4 @@ mongoose.connect(
 
 app.use(express.json());
 app.use(postRoute);
+app.use(userRoutes);
