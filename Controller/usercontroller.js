@@ -8,6 +8,26 @@ module.exports.userLogin = async (req, res) => {
   try {
     const isExistUser = await User.findOne({ email: email });
     if (isExistUser) {
+      const isValidPassword = await bcrypt.compareSync(
+        password,
+        isExistUser.password
+      );
+      if (isValidPassword) {
+        const token = jwt.sign({ id: isExistUser._id }, "tokenGenerate");
+        return res.status(200).json({
+          status: 200,
+          data: {
+            id: isExistUser._id,
+            username: isExistUser.username,
+            email: isExistUser.email,
+            token,
+          },
+        });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Password Incorrect Please Check Your Password " });
+      }
     }
     return res
       .status(401)
@@ -16,6 +36,8 @@ module.exports.userLogin = async (req, res) => {
     return res.status(400).json(err);
   }
 };
+
+// Signup part
 
 module.exports.userSignup = async (req, res) => {
   const { username, password, email } = req.body;
