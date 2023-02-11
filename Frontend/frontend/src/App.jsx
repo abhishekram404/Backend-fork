@@ -13,7 +13,7 @@ function App() {
 
   return (
     <div className="App">
-      <ToastContainer autoClose={1000} position="top-right" />
+      <ToastContainer autoClose={4000} position="top-right" />
       <LoginForm />
     </div>
   );

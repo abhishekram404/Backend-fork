@@ -8,5 +8,6 @@ const post = [
 ];
 
 module.exports.getAllPost = (req, res) => {
+  console.log(req.userId);
   return res.status(200).json(post);
 };

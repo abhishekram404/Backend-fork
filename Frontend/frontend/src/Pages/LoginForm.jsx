@@ -23,11 +23,11 @@ const LoginForm = () => {
           email: values.email,
           password: values.password,
         };
-        const response = await userLogin(user).unwrap();
+        const response = await userLogin(user).unwrap(); //.unwrap yeo grnai parxa like  formula
         toast.success("Form Submitted");
         console.log(response);
       } catch (error) {
-        toast.error("Something went wrong");
+        toast.error("Email or Password Incorrect");
       }
     },
   });

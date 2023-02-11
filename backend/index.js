@@ -3,6 +3,7 @@ const app = express();
 
 const postRoute = require("./Routes/postRoutes");
 const userRoutes = require("./Routes/userRoutes");
+const cors = require("cors");
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
@@ -16,7 +17,7 @@ mongoose.connect(
     app.listen(3000);
   }
 );
-
+app.use(cors());
 app.use(express.json());
 app.use(postRoute);
 app.use(userRoutes);
