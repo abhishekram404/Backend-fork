@@ -5,9 +5,10 @@ module.exports.checkAuth = (req, res, next) => {
     const token = req.headers.authorization;
     if (token) {
       const decode = jwt.decode(token, "tokenGenerate");
-      req.userId = decode.userId;
+
       // console.log(decode);
       if (decode) {
+        req.userId = decode.id;
         next();
       } else {
         res
