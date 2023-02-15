@@ -11,8 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "cloudinary": "^1.34.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
     "express-joi-validation": "^5.0.1",
     "joi": "^17.7.0",
     "jsonwebtoken": "^9.0.0",

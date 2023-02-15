@@ -4,6 +4,7 @@ const app = express();
 const postRoute = require("./Routes/postRoutes");
 const userRoutes = require("./Routes/userRoutes");
 const cors = require("cors");
+const fileupload = require("express-fileupload");
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
@@ -19,5 +20,12 @@ mongoose.connect(
 );
 app.use(cors());
 app.use(express.json());
-app.use(postRoute);
+app.use(
+  fileupload({
+    createParentPath: true,
+    // abortOnLimit: true,
+    // limits: 10000,
+  })
+);
 app.use(userRoutes);
+app.use(postRoute);

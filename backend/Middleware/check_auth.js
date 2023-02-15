@@ -18,7 +18,7 @@ module.exports.checkAuth = (req, res, next) => {
     } else {
       res.status(401).json({ message: "You are not authorized", status: 401 });
     }
-    console.log(token);
+    // console.log(token);
   } catch (error) {
     res.status(401).json({ message: "You are not authorized", status: 401 });
     console.log("Token not found");
