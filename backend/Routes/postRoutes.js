@@ -17,6 +17,9 @@ const removeSchema = joi.object({
 const updateSchema = joi.object({
   title: joi.string().required(),
   detail: joi.string().required(),
+  image: joi.optional(),
+  post_id: joi.string().required(),
+  public_id: joi.optional(),
 });
 
 const noAllow = (req, res) =>
@@ -31,7 +34,12 @@ router
   .post(auth.checkAuth, validation.body(PostSchema), postcontroller.createPost) // validation.body(PostSchema) yeo rakhna xa
   .all(noAllow);
 
-router.patch("/api/post/update", auth.checkAuth, postcontroller.UpdatePost);
+router.patch(
+  "/api/post/update",
+  auth.checkAuth,
+  validation.body(updateSchema),
+  postcontroller.UpdatePost
+);
 router.get("/api/getPostUser", auth.checkAuth, postcontroller.getPostByUser);
 router.delete(
   "/api/post/remove",

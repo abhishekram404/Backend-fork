@@ -3,6 +3,7 @@ const User = require("../Modals/User");
 const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
+const { isValidObjectId } = require("mongoose");
 
 const post = [
   {
@@ -20,24 +21,82 @@ module.exports.getPostByUser = (req, res) => {
   return res.status(200).json(post);
 };
 
+cloudinary.config({
+  api_key: "812785993884176",
+  api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
+  cloud_name: "dozx6bl1g",
+});
+
 module.exports.UpdatePost = async (req, res) => {
-  const { title, image, detail, post_id } = req.body;
-  if (req?.files || req?.files?.image) {
-    return res.status(400).json("please provide image file ");
-  } else {
-    try {
-      await Post.findByIdAndUpdate(
-        { _id: post_id },
-        {
-          title,
-          detail,
+  const { title, detail, post_id, public_id } = req.body;
+
+  try {
+    if (isValidObjectId(post_id)) {
+      if (req.files?.image && public_id) {
+        const file = req.files.image;
+        const fileName = path.extname(file.name);
+        const extensions = [".png", ".jpg", ".jpeg"];
+
+        if (!extensions.includes(fileName)) {
+          return res
+            .status(400)
+            .json({ message: "Please provide a valid image file" });
         }
-      );
-      return res.status(200).json("Successfully Updated");
-    } catch (error) {
-      return res.status(200).json("Something Went Wrong");
-      console.log(error);
+
+        file.mv(`./uploads/${file.name}`, async (err) => {
+          if (err) {
+            console.log(err);
+            return res.status(400).json({ message: "Failed to upload file" });
+          }
+
+          const uploadResponse = await cloudinary.uploader.upload(
+            `./uploads/${file.name}`,
+            { upload_preset: "sample_img" }
+          );
+
+          fs.unlink(`./uploads/${file.name}`, (error) => {
+            if (error) {
+              console.log(error);
+            }
+          });
+
+          const response = await cloudinary.uploader.destroy(public_id);
+
+          if (response.result === "not found") {
+            return res.status(400).json({ message: "Image not found" });
+          }
+
+          const newPost = await Post.findByIdAndUpdate(
+            post_id,
+            {
+              title,
+              detail,
+              image: uploadResponse.secure_url,
+              public_id: uploadResponse.public_id,
+            },
+            { new: true }
+          );
+
+          return res.status(200).json({ message: "Successfully updated post" });
+        });
+      } else {
+        const newPost = await Post.findByIdAndUpdate(
+          post_id,
+          {
+            title,
+            detail,
+          },
+          { new: true }
+        );
+
+        return res.status(200).json({ message: "Successfully updated post" });
+      }
+    } else {
+      return res.status(400).json({ message: "Invalid post ID" });
     }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -64,8 +123,15 @@ module.exports.createPost = async (req, res) => {
     }
     // direct ako file lai cloudnary mah pathuna mildaina tei varw  file.mv wala method use gareko
     file.mv(`./uploads/${file.name}`, (err) => {
-      // console.log(err);
+      if (err) {
+        console.log(err);
+        return res.status(400).json({
+          status: 400,
+          message: "Failed to upload file",
+        });
+      }
     });
+
     // yeoha samaa ko image ko upload grni code
 
     cloudinary.config({
@@ -104,7 +170,10 @@ module.exports.createPost = async (req, res) => {
       }
     );
   } catch (error) {
-    return res.status(400).json(error);
+    return res.status(400).json({
+      status: 400,
+      message: error,
+    });
   }
 };
 
@@ -116,12 +185,19 @@ module.exports.removePost = async (req, res) => {
       api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
       cloud_name: "dozx6bl1g",
     });
-    const response = await cloudinary.uploader.destroy(public_id);
-    if (response.result === "not found") {
-      return res.status(200).json(response);
+    if (isValidObjectId(post_id)) {
+      const response = await cloudinary.uploader.destroy(public_id);
+      if (response.result === "not found") {
+        return res.status(200).json(response);
+      } else {
+        await Post.findByIdAndDelete({ _id: post_id });
+        return res.status(200).json("Successfully Remove");
+      }
     } else {
-      await Post.findByIdAndDelete({ _id: post_id });
-      return res.status(200).json("Successfully Remove");
+      return res.status(400).json({
+        status: 400,
+        message: "id not valid",
+      });
     }
   } catch (error) {
     console.log(error);
@@ -142,4 +218,10 @@ module.exports.removePost = async (req, res) => {
 //   }
 //   console.log("Photo displayed successfully");
 //   // continue with other operations
+// });
+
+// cloudinary.config({
+//   api_key: "812785993884176",
+//   api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
+//   cloud_name: "dozx6bl1g",
 // });
