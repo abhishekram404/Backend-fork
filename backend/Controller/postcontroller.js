@@ -204,24 +204,3 @@ module.exports.removePost = async (req, res) => {
   }
   return res.status(200).json({ post_id, public_id });
 };
-
-// //const { v4: uuidv4 } = require('uuid');
-// // ...
-
-// const file = req.files.image;
-// const extension = path.extname(file.name);
-// const fileName = `${uuidv4()}${extension}`;
-
-// file.mv(`./uploads/${fileName}`, (err) => {
-//   if (err) {
-//     return res.status(500).json({ error: "Failed to upload image" });
-//   }
-//   console.log("Photo displayed successfully");
-//   // continue with other operations
-// });
-
-// cloudinary.config({
-//   api_key: "812785993884176",
-//   api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
-//   cloud_name: "dozx6bl1g",
-// });

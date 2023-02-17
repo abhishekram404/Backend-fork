@@ -24,7 +24,7 @@ const LoginForm = () => {
           password: values.password,
         };
         const response = await userLogin(user).unwrap(); //.unwrap yeo grnai parxa like  formula
-        toast.success("Form Submitted");
+        toast.success("Login Successful");
         console.log(response);
       } catch (error) {
         toast.error("Email or Password Incorrect");

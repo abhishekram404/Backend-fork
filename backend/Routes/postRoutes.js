@@ -27,6 +27,7 @@ const noAllow = (req, res) =>
     status: 405,
     message: "method not allowed",
   });
+
 router.get("/", auth.checkAuth, postcontroller.getAllPost);
 
 router

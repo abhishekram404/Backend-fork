@@ -1,8 +1,12 @@
 import { useFormik } from "formik";
 import React from "react";
 import * as Yup from "yup";
+import { useGetAllBlogsQuery } from "../Features/Auth/Blog/blogApi";
 
 const SignupForm = () => {
+  const data = useGetAllBlogsQuery();
+  console.log(data);
+
   const formik = useFormik({
     initialValues: {
       fullname: "",
@@ -22,6 +26,7 @@ const SignupForm = () => {
         .oneOf([Yup.ref("password"), null], "Passwords must match"),
     }),
   });
+
   return (
     <div>
       <div className="bg-green-500 min-h-screen flex flex-col">
@@ -85,7 +90,7 @@ const SignupForm = () => {
               )}
               <button
                 type="submit"
-                className="w-full text-center py-3 rounded bg-green text-white bg-gray-900 hover:bg-green-dark focus:outline-none my-1"
+                className="w-full text-center py-3 rounded bg-green text-white bg-green-600 hover:bg-green-dark focus:outline-none my-1"
               >
                 Create Account
               </button>
@@ -111,13 +116,9 @@ const SignupForm = () => {
 
           <div className="text-white mt-6">
             Already have an account?
-            <a
-              className="no-underline border-b border-blue text-blue"
-              href="../login/"
-            >
+            <a className="no-underline border-b border-blue text-blue" href="#">
               Log in
             </a>
-            .
           </div>
         </div>
       </div>
