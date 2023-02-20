@@ -4,6 +4,7 @@ const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
 const { isValidObjectId } = require("mongoose");
+const { response } = require("express");
 
 const post = [
   {
@@ -14,8 +15,16 @@ const post = [
   },
 ];
 
-module.exports.getAllPost = (req, res) => {
-  return res.status(200).json(post);
+module.exports.getAllPost = async (req, res) => {
+  try {
+    const response = await Post.find().sort({ createdAt: -1 });
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error,
+    });
+  }
 };
 module.exports.getPostByUser = (req, res) => {
   return res.status(200).json(post);
@@ -121,7 +130,7 @@ module.exports.createPost = async (req, res) => {
     if (!extensions.includes(fileName)) {
       return res.status(400).json("please provide valid image file ");
     }
-    // direct ako file lai cloudnary mah pathuna mildaina tei varw  file.mv wala method use gareko
+    // direct ako file lai cloudnary mah pathuna mildaina tei varw  file.mv  ly auta folder garuxa directory mah tei varw paila photo directory mah upload hunxa ani balaa Cloudinary mah jnxa wala method use gareko
     file.mv(`./uploads/${file.name}`, (err) => {
       if (err) {
         console.log(err);

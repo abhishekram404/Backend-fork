@@ -3,9 +3,14 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useUserLoginMutation } from "../Features/Auth/authApi";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
+  const nav = useNavigate();
   const [userLogin, { isError, isLoading, err }] = useUserLoginMutation();
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -23,9 +28,16 @@ const LoginForm = () => {
           email: values.email,
           password: values.password,
         };
-        const response = await userLogin(user).unwrap(); //.unwrap yeo grnai parxa like  formula
+        console.log(user);
+        //.unwrap yeo grnai parxa like  formula
+        const response = await userLogin(user).unwrap();
+        dispatch(addUser(response.data));
+
+        // if (!isError) {
         toast.success("Login Successful");
-        console.log(response);
+        nav(-1);
+        // }
+        // nav(-1) means jun page batw ako tei page mah return jani
       } catch (error) {
         toast.error("Email or Password Incorrect");
       }
