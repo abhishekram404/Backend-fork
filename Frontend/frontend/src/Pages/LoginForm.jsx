@@ -2,6 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useUserLoginMutation } from "../Features/Auth/authApi";
+import { addUser } from "../Features/Auth/userSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
