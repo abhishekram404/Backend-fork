@@ -6,6 +6,12 @@ const userRoutes = require("./Routes/userRoutes");
 const cors = require("cors");
 const fileupload = require("express-fileupload");
 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
+
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 
@@ -18,13 +24,11 @@ mongoose.connect(
     app.listen(3000);
   }
 );
-app.use(cors());
+
 app.use(express.json());
 app.use(
   fileupload({
     createParentPath: true,
-    // abortOnLimit: true,
-    // limits: 10000,
   })
 );
 app.use(userRoutes);

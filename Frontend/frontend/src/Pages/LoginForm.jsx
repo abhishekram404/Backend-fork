@@ -2,6 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useUserLoginMutation } from "../Features/Auth/authApi";
+import { addUser } from "../Features/Auth/userSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
@@ -35,7 +36,7 @@ const LoginForm = () => {
 
         // if (!isError) {
         toast.success("Login Successful");
-        nav(-1);
+        nav("/");
         // }
         // nav(-1) means jun page batw ako tei page mah return jani
       } catch (error) {
@@ -61,7 +62,7 @@ const LoginForm = () => {
               </p>
             </div>
           </div>
-          <div className="flex justify-center self-center  z-10">
+          <div className="flex space-x-5 justify-center self-center  z-10">
             <div className="p-12 bg-white mx-auto rounded-2xl w-100 ">
               <div className="mb-4">
                 <h3 className="font-semibold text-2xl text-gray-800">

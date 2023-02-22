@@ -1,7 +1,9 @@
 import React from "react";
 import { useGetAllBlogsQuery } from "../Features/Auth/Blog/blogApi";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+  const { user } = useSelector((store) => store.user);
   const { isError, isLoading, error, data } = useGetAllBlogsQuery();
   if (isLoading) {
     return (
@@ -23,9 +25,9 @@ const Home = () => {
           return (
             <div key={post._id}>
               <img src={post.image} alt="img" />
-              <div className="grid grid-cols-2">
-                <h1>{post.title}</h1>
-                <p>{post.detail}</p>
+              <div className="mt-2 space-y-2">
+                <h1 className="text-2xl font-bold">{post.title}</h1>
+                <p>{post.detail.substring(0, 200)}</p>
               </div>
             </div>
           );

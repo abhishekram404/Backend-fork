@@ -1,30 +1,50 @@
 import { useFormik } from "formik";
 import React from "react";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
-import { useGetAllBlogsQuery } from "../Features/Auth/Blog/blogApi";
 
+import { useUserSignupMutation } from "../Features/Auth/authApi";
 const SignupForm = () => {
-  const data = useGetAllBlogsQuery();
-  console.log(data);
+  // const data = useGetAllBlogsQuery();
+  // console.log(data);
+  const nav = useNavigate();
+  const [userSignup, { isError, isLoading, err }] = useUserSignupMutation();
 
   const formik = useFormik({
     initialValues: {
-      fullname: "",
+      username: "",
       email: "",
       password: "",
-      confirm: "",
+      // confirm: "",
     },
+
     validationSchema: Yup.object({
       email: Yup.string().email("Email Required").required("Required"),
       password: Yup.string()
         .min(8, "Password must be at least 8 characters")
         .required("Required"),
-      fullname: Yup.string().required("Required"),
-      confirm: Yup.string()
-        .label("confirm password")
-        .required("Required")
-        .oneOf([Yup.ref("password"), null], "Passwords must match"),
+      username: Yup.string().required("Required"),
+      // confirm: Yup.string()
+      //   .label("confirm password")
+      //   .required("Required")
+      //   .oneOf([Yup.ref("password"), null], "Passwords must match"),
     }),
+    onSubmit: async (values) => {
+      try {
+        const user = {
+          email: values.email,
+          password: values.password,
+          // confirm: values.confirm,
+          username: values.username,
+        };
+        const response = await userSignup(user).unwrap();
+        toast.success("Successfully Registered ");
+        nav("/user/login");
+      } catch (error) {
+        toast.error(error.data.message);
+      }
+    },
   });
 
   return (
@@ -32,18 +52,18 @@ const SignupForm = () => {
       <div className="bg-green-500 min-h-screen flex flex-col">
         <div className="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
           <div className="bg-white px-6 py-8 rounded shadow-md text-black w-full">
-            <h1 className="mb-8 text-3xl text-center">Sign up</h1>
             <form onSubmit={formik.handleSubmit}>
+              <h1 className="mb-8 text-3xl text-center">Sign up</h1>
               <input
                 type="text"
                 className="block border border-grey-light w-full p-3 rounded mb-4"
-                name="fullname"
+                name="username"
                 placeholder="Full Name"
                 onChange={formik.handleChange}
-                value={formik.values.fullname}
+                value={formik.values.username}
               />
-              {formik.errors.fullname && formik.touched.fullname ? (
-                <h1 className="text-pink-700">{formik.errors.fullname}</h1>
+              {formik.errors.username && formik.touched.username ? (
+                <h1 className="text-pink-700">{formik.errors.username}</h1>
               ) : (
                 ""
               )}
@@ -75,19 +95,7 @@ const SignupForm = () => {
               ) : (
                 ""
               )}
-              <input
-                type="password"
-                className="block border border-grey-light w-full p-3 rounded mb-4"
-                name="confirm"
-                placeholder="Confirm Password"
-                onChange={formik.handleChange}
-                value={formik.values.confirm}
-              />
-              {formik.errors.confirm && formik.touched.confirm ? (
-                <h1 className="text-red-700">{formik.errors.confirm} </h1>
-              ) : (
-                ""
-              )}
+
               <button
                 type="submit"
                 className="w-full text-center py-3 rounded bg-green text-white bg-green-600 hover:bg-green-dark focus:outline-none my-1"

@@ -37,13 +37,12 @@ module.exports.userLogin = async (req, res) => {
   }
 };
 
-// Signup part
-
 module.exports.userSignup = async (req, res) => {
   const { username, password, email } = req.body;
 
   try {
     const isExistUser = await User.findOne({ email: email });
+
     if (isExistUser) {
       return res
         .status(400)

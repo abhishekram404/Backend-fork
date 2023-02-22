@@ -13,7 +13,18 @@ export const blogApi = createApi({
       }),
       providesTags: ["Blog"],
     }),
+    getBlogByUser: builder.query({
+      // user login ko mutation tya login ko try catch mah poass greko xa tya heresi bujinxa
+      query: (token) => ({
+        url: "/api/userPosts",
 
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      }),
+      invalidatesTags: ["Blog"],
+    }),
     addBlogs: builder.mutation({
       // user login ko mutation tya login ko try catch mah poass greko xa tya heresi bujinxa
       query: (val) => ({
@@ -21,7 +32,7 @@ export const blogApi = createApi({
         body: val.blog,
         method: "POST",
         headers: {
-          " Authorization": val.token,
+          Authorization: val.token,
         },
       }),
       invalidatesTags: ["Blog"],
@@ -34,7 +45,7 @@ export const blogApi = createApi({
         body: val.blog,
         method: "PATCH",
         headers: {
-          " Authorization": val.token,
+          Authorization: val.token,
         },
       }),
       invalidatesTags: ["Blog"],
@@ -46,7 +57,7 @@ export const blogApi = createApi({
         body: val.blog,
         method: "DELETE",
         headers: {
-          " Authorization": val.token,
+          Authorization: val.token,
         },
       }),
       invalidatesTags: ["Blog"],
@@ -60,4 +71,5 @@ export const {
   useAddBlogsMutation,
   useRemoveBlogsMutation,
   useUpdateBlogsMutation,
+  useGetBlogByUserQuery,
 } = blogApi;

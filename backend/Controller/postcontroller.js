@@ -26,8 +26,17 @@ module.exports.getAllPost = async (req, res) => {
     });
   }
 };
-module.exports.getPostByUser = (req, res) => {
-  return res.status(200).json(post);
+module.exports.getPostByUser = async (req, res) => {
+  const userId = req.userId;
+  try {
+    const posts = await User.findById({ _id: userId }).populate("posts");
+    return res.status(200).json(posts);
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error,
+    });
+  }
 };
 
 cloudinary.config({
@@ -115,7 +124,7 @@ module.exports.createPost = async (req, res) => {
   }
 
   const userId = req.userId;
-  const { title, detail, image } = req.body;
+  const { title, detail } = req.body;
   // image ko process yeha batw start vaxa
   try {
     // post banuda file ayo ki nai vnerw check grna prxa tesko  file ayo vney tala jnxa ayena vney Please provide image file vnerw dekhuxa

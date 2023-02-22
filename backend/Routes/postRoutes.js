@@ -41,7 +41,7 @@ router.patch(
   validation.body(updateSchema),
   postcontroller.UpdatePost
 );
-router.get("/api/getPostUser", auth.checkAuth, postcontroller.getPostByUser);
+router.get("/api/userPosts", auth.checkAuth, postcontroller.getPostByUser);
 router.delete(
   "/api/post/remove",
   auth.checkAuth,
