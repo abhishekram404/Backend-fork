@@ -9,7 +9,7 @@ const Header = () => {
   return (
     <div>
       <nav className="bg-blue-700 border-gray-200 sm:px-4  rounded dark:bg-gray-900">
-        <div className="container flex flex-wrap items-center justify-between ">
+        <div className="container flex flex-wrap items-center justify-between ml-[80px] ">
           <Link to="/" className="flex items-center">
             <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
               Blog
@@ -38,7 +38,10 @@ const Header = () => {
             </svg>
           </button>
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-            <ul className="flex flex-col p-1 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+            <ul
+              className="flex flex-col justify-end p-1 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-4 md:mt-0 md:text-sm md:font-medium md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
+              style={{ marginLeft: "auto" }}
+            >
               {user === null ? (
                 <div className="flex  space-x-5 flex-wrap m-6">
                   <li>
@@ -64,7 +67,7 @@ const Header = () => {
                 <div className="flex  space-x-5 flex-wrap m-6">
                   <li>
                     <Link
-                      to="/crud/create"
+                      to="/create/post"
                       className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-white md:p-0 dark:text-white"
                     >
                       Create

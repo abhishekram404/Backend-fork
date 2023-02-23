@@ -39,11 +39,11 @@ module.exports.getPostByUser = async (req, res) => {
   }
 };
 
-cloudinary.config({
-  api_key: "812785993884176",
-  api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
-  cloud_name: "dozx6bl1g",
-});
+// cloudinary.config({
+//   api_key: "812785993884176",
+//   api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
+//   cloud_name: "dozx6bl1g",
+// });
 
 module.exports.UpdatePost = async (req, res) => {
   const { title, detail, post_id, public_id } = req.body;
@@ -53,13 +53,19 @@ module.exports.UpdatePost = async (req, res) => {
       if (req.files?.image && public_id) {
         const file = req.files.image;
         const fileName = path.extname(file.name);
-        const extensions = [".png", ".jpg", ".jpeg"];
+        const extensions = [".png", ".jpg", ".jpeg", ".JPG"];
 
         if (!extensions.includes(fileName)) {
           return res
             .status(400)
             .json({ message: "Please provide a valid image file" });
         }
+        cloudinary.config({
+          api_key: "812785993884176",
+          api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
+          cloud_name: "dozx6bl1g",
+        });
+        const response = await cloudinary.uploader.destroy(public_id);
 
         file.mv(`./uploads/${file.name}`, async (err) => {
           if (err) {
@@ -77,8 +83,6 @@ module.exports.UpdatePost = async (req, res) => {
               console.log(error);
             }
           });
-
-          const response = await cloudinary.uploader.destroy(public_id);
 
           if (response.result === "not found") {
             return res.status(400).json({ message: "Image not found" });

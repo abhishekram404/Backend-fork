@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 import { useGetBlogByUserQuery } from "../Features/Auth/Blog/blogApi";
 
 const Profile = () => {
   const { user } = useSelector((store) => store.user);
-  const { state } = useLocation;
+
   const nav = useNavigate();
+
   const { isError, isLoading, error, data } = useGetBlogByUserQuery(user.token);
   if (isLoading) {
     return (
@@ -39,7 +40,7 @@ const Profile = () => {
                 <div className="flex justify-end space-x-9">
                   <button
                     onClick={() => {
-                      nav("/crud/update", { state: post });
+                      nav("/update/post", { state: post });
                     }}
                   >
                     {" "}

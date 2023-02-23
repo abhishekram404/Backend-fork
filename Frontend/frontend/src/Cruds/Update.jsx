@@ -6,16 +6,14 @@ import { useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router";
 
 import { toast } from "react-toastify";
-import {
-  useAddBlogsMutation,
-  useUpdateBlogsMutation,
-} from "../Features/Auth/Blog/blogApi";
+import { useUpdateBlogsMutation } from "../Features/Auth/Blog/blogApi";
 
-const CrudForm = () => {
+const Update = () => {
   const nav = useNavigate();
+  const location = useLocation();
+  const { state } = location;
 
-  const [createPost, { isLoading, error }] = useAddBlogsMutation();
-  const [updatePost, { updateLoading, updateError }] = useUpdateBlogsMutation();
+  const [updatePost, { isLoading, isError }] = useUpdateBlogsMutation();
   const { user } = useSelector((store) => store.user); // Create wala
 
   const blogSchema = Yup.object().shape({
@@ -31,30 +29,42 @@ const CrudForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      // title: state == null ? "" : state.title,
-      // detail: state == null ? "" : state.detail,
-      // image: null,
-      // imageUrl: state == null ? "" : state.imageUrl,
-      title: "",
-      detail: "",
+      title: state == null ? "" : state.title,
+      detail: state == null ? "" : state.detail,
       image: null,
-      imageUrl: "",
+      imageUrl: state == null ? "" : state.imageUrl,
     },
     onSubmit: async (val) => {
       let formData = new FormData();
       formData.append("title", val.title);
       formData.append("detail", val.detail);
-      formData.append("image", val.image);
-      try {
-        const blogData = {
-          blog: formData,
-          token: user.token,
-        };
-        const response = await createPost(blogData).unwrap();
-        toast.success("successfully created");
-        nav("/");
-      } catch (err) {
-        toast.error(err.data);
+      formData.append("post_id", state._id);
+      if (val.image == null) {
+        try {
+          const blogData = {
+            blog: formData,
+            token: user.token,
+          };
+          const response = await updatePost(blogData).unwrap();
+          toast.success("successfully updated");
+          nav(-1);
+        } catch (err) {
+          toast.error(err.data.message);
+        }
+      } else {
+        formData.append("public_id", state.public_id);
+        formData.append("image", val.image);
+        try {
+          const blogData = {
+            blog: formData,
+            token: user.token,
+          };
+          const response = await updatePost(blogData).unwrap();
+          toast.success("successfully updated");
+          nav(-1);
+        } catch (err) {
+          toast.error(err.data.message);
+        }
       }
     },
     validationSchema: blogSchema,
@@ -130,7 +140,7 @@ const CrudForm = () => {
 
           <div>
             <button className="bg-blue-500 p-2 w-[40%] rounded" type="submit">
-              {isLoading === true || updateError === true ? (
+              {isLoading == true ? (
                 <div className="h-7 w-7 mx-auto rounded-full   border-2 border-black border-t-white animate-spin"></div>
               ) : (
                 <h1>Submit</h1>
@@ -143,4 +153,4 @@ const CrudForm = () => {
   );
 };
 
-export default CrudForm;
+export default Update;

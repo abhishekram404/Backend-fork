@@ -23,7 +23,7 @@ export const blogApi = createApi({
           Authorization: token,
         },
       }),
-      invalidatesTags: ["Blog"],
+      providesTags: ["Blog"],
     }),
     addBlogs: builder.mutation({
       // user login ko mutation tya login ko try catch mah poass greko xa tya heresi bujinxa

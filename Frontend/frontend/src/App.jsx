@@ -12,6 +12,7 @@ import Header from "./Components/Header";
 // import Create from "./Pages/Create";
 import Create from "../src/Cruds/Create";
 import Profile from "./Pages/Profile";
+import Update from "./Cruds/Update";
 
 function App() {
   const data = useUserLoginMutation();
@@ -23,7 +24,8 @@ function App() {
       <ToastContainer autoClose={4000} position="top-right" />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/crud/:type" element={<Create />} />
+        <Route path="/create/post" element={<Create />} />
+        <Route path="/update/post" element={<Update />} />
         <Route path="/user/profile" element={<Profile />} />
         <Route path="/user/login" element={<LoginForm />} />
         <Route path="/user/signUp" element={<SignupForm />} />
