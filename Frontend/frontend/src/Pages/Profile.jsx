@@ -32,7 +32,11 @@ const Profile = () => {
           data.posts.map((post) => {
             return (
               <div key={post._id}>
-                <img src={post.image} alt="img" />
+                <img
+                  src={post.image}
+                  alt="img"
+                  className="object-cover h-[400px] w-[400px]"
+                />
                 <div className="mt-2 space-y-2">
                   <h1 className="text-2xl font-bold">{post.title}</h1>
                   <p>{post.detail.substring(0, 200)}</p>
@@ -48,7 +52,7 @@ const Profile = () => {
                   </button>
                   <button>
                     {" "}
-                    <i class="fa-solid fa-trash fa-xl"></i>
+                    <i className="fa-solid fa-trash fa-xl"></i>
                   </button>
                 </div>
               </div>

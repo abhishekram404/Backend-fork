@@ -19,12 +19,16 @@ const Home = () => {
   }
 
   return (
-    <div className="grid grid-cols-3 p-5">
+    <div className="grid grid-cols-3 p-5 ">
       {data &&
         data.map((post) => {
           return (
             <div key={post._id}>
-              <img src={post.image} alt="img" />
+              <img
+                src={post.image}
+                alt="img"
+                className="object-cover h-[400px] w-[400px]"
+              />
               <div className="mt-2 space-y-2">
                 <h1 className="text-2xl font-bold">{post.title}</h1>
                 <p>{post.detail.substring(0, 200)}</p>

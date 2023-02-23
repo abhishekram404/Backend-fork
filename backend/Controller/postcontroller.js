@@ -39,11 +39,11 @@ module.exports.getPostByUser = async (req, res) => {
   }
 };
 
-// cloudinary.config({
-//   api_key: "812785993884176",
-//   api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
-//   cloud_name: "dozx6bl1g",
-// });
+cloudinary.config({
+  api_key: "812785993884176",
+  api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
+  cloud_name: "dozx6bl1g",
+});
 
 module.exports.UpdatePost = async (req, res) => {
   const { title, detail, post_id, public_id } = req.body;
