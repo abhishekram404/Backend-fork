@@ -13,22 +13,29 @@ import Header from "./Components/Header";
 import Create from "../src/Cruds/Create";
 import Profile from "./Pages/Profile";
 import Update from "./Cruds/Update";
+import Detail from "./Pages/Detail";
+import NotFound from "./Pages/NotFound";
+import RequireAuth from "./AurthPages/RequireAurth";
 
 function App() {
   const data = useUserLoginMutation();
   console.log(data);
 
   return (
-    <div className="App">
+    <div className="App main-wrapper bg-[#f1f2f6] dark:bg-[#0f172A]">
       <Header />
-      <ToastContainer autoClose={4000} position="top-right" />
+      <ToastContainer autoClose={2000} position="top-right" />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/create/post" element={<Create />} />
-        <Route path="/update/post" element={<Update />} />
-        <Route path="/user/profile" element={<Profile />} />
+        <Route element={<RequireAuth />}>
+          <Route path="/create/post" element={<Create />} />
+          <Route path="/update/post" element={<Update />} />
+          <Route path="/postDetail/" element={<Detail />} />
+          <Route path="/user/profile" element={<Profile />} />
+        </Route>
         <Route path="/user/login" element={<LoginForm />} />
         <Route path="/user/signUp" element={<SignupForm />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

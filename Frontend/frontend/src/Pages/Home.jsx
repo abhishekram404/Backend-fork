@@ -1,9 +1,11 @@
 import React from "react";
 import { useGetAllBlogsQuery } from "../Features/Auth/Blog/blogApi";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const Home = () => {
   const { user } = useSelector((store) => store.user);
+  const nav = useNavigate();
   const { isError, isLoading, error, data } = useGetAllBlogsQuery();
   if (isLoading) {
     return (
@@ -19,19 +21,27 @@ const Home = () => {
   }
 
   return (
-    <div className="grid grid-cols-3 p-5 ">
+    <div className="grid grid-cols-3 p-5 gap-3 ">
       {data &&
         data.map((post) => {
           return (
-            <div key={post._id}>
+            <div
+              className="hover:cursor-pointer p-7 border-3"
+              onClick={() => nav("postDetail", { state: post })}
+              key={post._id}
+            >
               <img
                 src={post.image}
                 alt="img"
-                className="object-cover h-[400px] w-[400px]"
+                className="object-cover h-[450px] w-full"
               />
               <div className="mt-2 space-y-2">
-                <h1 className="text-2xl font-bold">{post.title}</h1>
-                <p>{post.detail.substring(0, 200)}</p>
+                <h1 className="text-2xl font-bold dark:text-white">
+                  {post.title}
+                </h1>
+                <p className="dark:text-white">
+                  {post.detail.substring(0, 200)}
+                </p>
               </div>
             </div>
           );
