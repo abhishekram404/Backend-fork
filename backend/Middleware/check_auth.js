@@ -5,22 +5,25 @@ module.exports.checkAuth = (req, res, next) => {
     const token = req.headers.authorization;
     if (token) {
       const decode = jwt.decode(token, "tokenGenerate");
-
-      // console.log(decode);
       if (decode) {
         req.userId = decode.id;
         next();
       } else {
-        res
-          .status(401)
-          .json({ message: "You are not authorized", status: 401 });
+        return res.status(401).json({
+          status: 401,
+          message: "You are not authorised",
+        });
       }
     } else {
-      res.status(401).json({ message: "You are not authorized", status: 401 });
+      return res.status(401).json({
+        status: 401,
+        message: "You are not authorised",
+      });
     }
-    // console.log(token);
-  } catch (error) {
-    res.status(401).json({ message: "You are not authorized", status: 401 });
-    console.log("Token not found");
+  } catch (err) {
+    return res.status(401).json({
+      status: 401,
+      message: "You are not authorised",
+    });
   }
 };
