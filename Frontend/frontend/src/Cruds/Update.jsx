@@ -29,17 +29,16 @@ const Update = () => {
 
   const formik = useFormik({
     initialValues: {
-      title: state == null ? "" : state.title,
-      detail: state == null ? "" : state.detail,
+      title: state?.title || "",
+      detail: state?.detail || "",
       image: null,
-      imageUrl: state == null ? "" : state.image,
+      imageUrl: state?.image || "",
     },
     onSubmit: async (val) => {
       let formData = new FormData();
       formData.append("title", val.title);
       formData.append("detail", val.detail);
       formData.append("post_id", state._id);
-      // formData.append("public_id", state.public_id);
       if (val.image == null) {
         try {
           const blogData = {

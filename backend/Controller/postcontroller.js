@@ -38,13 +38,11 @@ module.exports.getPostByUser = async (req, res) => {
     });
   }
 };
-
-cloudinary.config({
-  api_key: "812785993884176",
-  api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
-  cloud_name: "dozx6bl1g",
-});
-
+// cloudinary.config({
+//   api_key: "812785993884176",
+//   api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
+//   cloud_name: "dozx6bl1g",
+// });
 module.exports.UpdatePost = async (req, res) => {
   const { title, detail, post_id, public_id } = req.body;
 
@@ -53,81 +51,91 @@ module.exports.UpdatePost = async (req, res) => {
       if (req.files?.image && public_id) {
         const file = req.files.image;
         const fileName = path.extname(file.name);
-        const extensions = [".png", ".jpg", ".jpeg", ".JPG"];
+        const extensions = [".png", ".jpg", ".jpeg", ".CR3", ".JPG"];
 
         if (!extensions.includes(fileName)) {
-          return res
-            .status(400)
-            .json({ message: "Please provide a valid image file" });
+          return res.status(400).json({
+            message: "please provide valid image file",
+            status: 400,
+          });
         }
         cloudinary.config({
           api_key: "812785993884176",
           api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
           cloud_name: "dozx6bl1g",
         });
-        const response = await cloudinary.uploader.destroy(public_id);
 
-        file.mv(`./uploads/${file.name}`, async (err) => {
-          if (err) {
-            console.log(err);
-            return res.status(400).json({ message: "Failed to upload file" });
-          }
+        cloudinary.uploader.destroy(public_id);
 
-          const uploadResponse = await cloudinary.uploader.upload(
-            `./uploads/${file.name}`,
-            { upload_preset: "sample_img" }
-          );
-
-          fs.unlink(`./uploads/${file.name}`, (error) => {
-            if (error) {
-              console.log(error);
-            }
-          });
-
-          if (response.result === "not found") {
-            return res.status(400).json({ message: "Image not found" });
-          }
-
-          const newPost = await Post.findByIdAndUpdate(
-            post_id,
-            {
-              title,
-              detail,
-              image: uploadResponse.secure_url,
-              public_id: uploadResponse.public_id,
-            },
-            { new: true }
-          );
-
-          return res.status(200).json({ message: "Successfully updated post" });
+        file.mv(`./uploads/${file.name}`, (err) => {
+          // console.log(err);
         });
+
+        cloudinary.uploader.upload(
+          `./uploads/${file.name}`,
+          { upload_preset: "sample_img" },
+          async (err, result) => {
+            if (err) {
+              return res.status(401).json({
+                status: 401,
+                message: `${err.message}`,
+              });
+            } else {
+              fs.unlink(`./uploads/${file.name}`, (err) => {});
+
+              const response = await Post.findByIdAndUpdate(
+                { _id: post_id },
+                {
+                  title,
+                  detail,
+                  image: result.secure_url,
+                  public_id: result.public_id,
+                }
+              );
+
+              return res.status(201).json(response);
+            }
+          }
+        );
       } else {
-        const newPost = await Post.findByIdAndUpdate(
-          post_id,
+        await Post.findByIdAndUpdate(
+          { _id: post_id },
           {
             title,
             detail,
-          },
-          { new: true }
+          }
         );
 
-        return res.status(200).json({ message: "Successfully updated post" });
+        return res.status(200).json({
+          status: 200,
+          message: "successfully updated",
+        });
       }
     } else {
-      return res.status(400).json({ message: "Invalid post ID" });
+      return res.status(400).json({
+        status: 400,
+        message: "please provide valid id",
+      });
     }
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: error.message });
+  } catch (err) {
+    return res.status(400).json({
+      status: 400,
+      message: err,
+    });
   }
 };
 
+// cloudinary.config({
+//   api_key: "812785993884176",
+//   api_secret: "zTUxCL1yJ-XxuAczyy5pEHuWcqw",
+//   cloud_name: "dozx6bl1g",
+// });
 module.exports.createPost = async (req, res) => {
+  const userId = req.userId;
   if (!req.userId) {
     return res.status(400).json({ error: "User Id is missing" });
   }
 
-  const userId = req.userId;
   const { title, detail } = req.body;
   // image ko process yeha batw start vaxa
   try {
@@ -138,7 +146,7 @@ module.exports.createPost = async (req, res) => {
 
     const file = req.files.image;
     const fileName = path.extname(file.name);
-    const extensions = [".png", ".jpg", ".jpeg"];
+    const extensions = [".png", ".jpg", ".jpeg", ".JPG"];
 
     if (!extensions.includes(fileName)) {
       return res.status(400).json("please provide valid image file ");

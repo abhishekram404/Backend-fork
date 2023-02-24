@@ -15,7 +15,7 @@ const CrudForm = () => {
   const nav = useNavigate();
 
   const [createPost, { isLoading, error }] = useAddBlogsMutation();
-  const [updatePost, { updateLoading, updateError }] = useUpdateBlogsMutation();
+
   const { user } = useSelector((store) => store.user); // Create wala
 
   const blogSchema = Yup.object().shape({
@@ -31,10 +31,6 @@ const CrudForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      // title: state == null ? "" : state.title,
-      // detail: state == null ? "" : state.detail,
-      // image: null,
-      // imageUrl: state == null ? "" : state.imageUrl,
       title: "",
       detail: "",
       image: null,
@@ -130,7 +126,7 @@ const CrudForm = () => {
 
           <div>
             <button className="bg-blue-500 p-2 w-[40%] rounded" type="submit">
-              {isLoading === true || updateError === true ? (
+              {isLoading === true ? (
                 <div className="h-7 w-7 mx-auto rounded-full   border-2 border-black border-t-white animate-spin"></div>
               ) : (
                 <h1>Submit</h1>

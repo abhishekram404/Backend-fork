@@ -7,7 +7,7 @@ const validation = require("express-joi-validation").createValidator({});
 
 const PostSchema = joi.object({
   title: joi.string().required(),
-  detail: joi.string().required().max(200),
+  detail: joi.string().required(),
   image: joi.optional(),
 });
 const removeSchema = joi.object({
