@@ -52,7 +52,7 @@ const Update = () => {
           toast.error(err.data.message);
         }
       } else {
-        formData.append("public_id", state.public_id);
+        formData.append("public_id", state.public_Id);
         formData.append("image", val.image);
         try {
           const blogData = {

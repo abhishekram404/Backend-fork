@@ -45,7 +45,7 @@ router.get("/api/userPosts", auth.checkAuth, postcontroller.getPostByUser);
 router.delete(
   "/api/post/remove",
   auth.checkAuth,
-  validation.body(removeSchema),
+  validation.query(removeSchema),
   postcontroller.removePost
 );
 

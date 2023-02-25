@@ -118,6 +118,7 @@ module.exports.UpdatePost = async (req, res) => {
       });
     }
   } catch (err) {
+    console.log(err)
     return res.status(400).json({
       status: 400,
       message: err,
@@ -208,7 +209,7 @@ module.exports.createPost = async (req, res) => {
 };
 
 module.exports.removePost = async (req, res) => {
-  const { post_id, public_id } = req.body;
+  const { post_id, public_id } = req.query;
   try {
     cloudinary.config({
       api_key: "812785993884176",
@@ -216,13 +217,8 @@ module.exports.removePost = async (req, res) => {
       cloud_name: "dozx6bl1g",
     });
     if (isValidObjectId(post_id)) {
-      const response = await cloudinary.uploader.destroy(public_id);
-      if (response.result === "not found") {
-        return res.status(200).json(response);
-      } else {
         await Post.findByIdAndDelete({ _id: post_id });
         return res.status(200).json("Successfully Remove");
-      }
     } else {
       return res.status(400).json({
         status: 400,

@@ -27,9 +27,10 @@ const Profile = () => {
       </div>
     );
   }
-  const remove = async (post_id, public_id) => {
+  const remove = async ({post_id, public_id}) => {
+    console.log(post_id, public_id)
     try {
-      const response = await removePost({ post_id, public_id }).unwrap();
+      const response = await removePost({ post_id, public_id, token }).unwrap();
       toast.success("successfully remove");
     } catch (err) {
       toast.error(err.message);
@@ -62,7 +63,7 @@ const Profile = () => {
                     {" "}
                     <i className="fa-solid fa-pen-to-square fa-xl dark:text-white dark:hover:text-blue-500"></i>
                   </button>
-                  <button onClick={() => remove(post._id, post.public_id)}>
+                  <button onClick={() => remove({post_id : post._id, public_id: post.public_Id})}>
                     {" "}
                     <i className="fa-solid fa-trash fa-xl dark:text-red-600 hover:dark:text-red-600"></i>
                   </button>

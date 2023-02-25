@@ -54,10 +54,15 @@ export const blogApi = createApi({
       // user login ko mutation tya login ko try catch mah poass greko xa tya heresi bujinxa
       query: (val) => ({
         url: "/api/post/remove",
-        body: val.blog,
+        // body: val.blog,
+        params : {
+          post_id : val.post_id,
+          public_id : val.public_id
+        },
         method: "DELETE",
         headers: {
           Authorization: val.token,
+          
         },
       }),
       invalidatesTags: ["Blog"],
