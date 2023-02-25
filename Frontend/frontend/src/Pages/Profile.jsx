@@ -39,11 +39,11 @@ const Profile = () => {
   console.log(data);
   return (
     <div>
-      <div className="grid grid-cols-3 p-5">
+      <div className="grid grid-cols-1 p-5 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {data &&
           data.posts.map((post) => {
             return (
-              <div key={post._id}>
+              <div key={post._id} className="pb-10">
                 <img
                   src={post.image}
                   alt="img"

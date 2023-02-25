@@ -16,10 +16,10 @@ import Update from "./Cruds/Update";
 import Detail from "./Pages/Detail";
 import NotFound from "./Pages/NotFound";
 import RequireAuth from "./AurthPages/RequireAurth";
+import { useSelector } from "react-redux";
 
 function App() {
-  const data = useUserLoginMutation();
-  console.log(data);
+  const { user } = useSelector((store) => store.user);
 
   return (
     <div className="App main-wrapper bg-[#f1f2f6] dark:bg-[#0f172A]">
@@ -33,7 +33,10 @@ function App() {
           <Route path="/postDetail/" element={<Detail />} />
           <Route path="/user/profile" element={<Profile />} />
         </Route>
-        <Route path="/user/login" element={<LoginForm />} />
+        <Route
+          path="/user/login"
+          element={user === null ? <LoginForm /> : <Home />}
+        />
         <Route path="/user/signUp" element={<SignupForm />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
